@@ -20,7 +20,9 @@ env = Env(ES_USE_SSL=bool)
 
 
 def create_index_mappings(es_client, ea_index, recreate=False, old_ea_index=None):
+    print("Checking Elastic Version")
     esversion = es_client.info()["version"]["number"]
+    #esversion = "6.8.1"
     print("Elastic Version: " + esversion)
 
     es_index_mappings = read_es_index_mappings() if is_atleastsix(esversion) else read_es_index_mappings(5)
@@ -250,6 +252,11 @@ def main():
                      password=password,
                      aws_region=aws_region,
                      profile_name=args.profile)
+    
+    
+    h = {}
+    h['authorization'] = "Bearer " + bearer
+
     es = Elasticsearch(
         host=host,
         port=port,
@@ -258,7 +265,7 @@ def main():
         verify_certs=verify_certs,
         connection_class=RequestsHttpConnection,
         http_auth=http_auth,
-        headers=bearer,
+        headers=h,
         url_prefix=url_prefix,
         send_get_body_as=send_get_body_as,
         client_cert=client_cert,

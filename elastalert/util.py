@@ -324,7 +324,11 @@ def elasticsearch_client(conf):
                                      aws_region=es_conn_conf['aws_region'],
                                      profile_name=es_conn_conf['profile'])
     if es_conn_conf['es_bearer']:
-        es_conn_conf['headers'] = {"Authorization": "Bearer " + es_conn_conf['es_bearer']}
+        h = {}
+        h['authorization'] = "Bearer " + es_conn_conf['es_bearer']
+        es_conn_conf['headers'] = h
+  
+    #print(es_conn_conf)
 
     return ElasticSearchClient(es_conn_conf)
 
